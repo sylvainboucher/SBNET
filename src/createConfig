@@ -1,0 +1,84 @@
+#!/usr/bin/php
+<?php
+/**
+ *
+ * Copyright 2011 Sylvain Boucher
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * usage: ./createConfig [dirname]
+ *
+ */
+require_once 'Zend/Tool/Project/Context/Zf/ApplicationConfigFile.php';
+$dirname = $argv[1];
+$currentDir =  dirname(__FILE__);
+$configfile = $currentDir . '/../'. $dirname . '/application/configs';
+$appConfigFile = new Zend_Tool_Project_Context_Zf_ApplicationConfigFile();
+$appConfigFile->setBaseDirectory($configfile);
+
+$appConfigFile->addStringItem('resources.db.defaultMetadataCache', 'default');
+$appConfigFile->addStringItem(';resources.modules[]', '');
+$appConfigFile->addStringItem(';resources.frontController.moduleDirectory', "APPLICATION_PATH \"/modules\"", 'production', false);
+$appConfigFile->addStringItem('resources.view.encoding', 'UTF-8');
+$appConfigFile->addStringItem('autoloadernamespaces[]', "Net\\\\");
+$appConfigFile->addStringItem('layouthelper.title', 'website.com');
+$appConfigFile->addStringItem('layouthelper.separator', ' - ');
+$appConfigFile->addStringItem('layouthelper.keywords', 'website.com');
+$appConfigFile->addStringItem('layouthelper.description', 'website.com');
+$appConfigFile->addStringItem('resources.mail.defaultFrom.email', 'john@example.com');
+$appConfigFile->addStringItem('resources.mail.defaultFrom.name', "John Doe");
+$appConfigFile->addStringItem('resources.mail.defaultReplyTo.email',  'Jane@example.com');
+$appConfigFile->addStringItem('resources.mail.defaultReplyTo.name', "Jane Doe");
+$appConfigFile->addStringItem('resources.log.stream.writerName', 'Stream');
+$appConfigFile->addStringItem('resources.log.stream.writerParams.stream', "APPLICATION_PATH \"/../data/logs/application.log\"", 'production', false);
+$appConfigFile->addStringItem('resources.cachemanager.default.frontend.name', 'Core');
+$appConfigFile->addStringItem('resources.cachemanager.default.frontend.options.lifetime', 7200);
+$appConfigFile->addStringItem('resources.cachemanager.default.frontend.options.automatic_serialization', true);
+$appConfigFile->addStringItem('resources.cachemanager.default.backend.name', 'File');
+$appConfigFile->addStringItem('resources.cachemanager.default.backend.options.cache_dir', 'APPLICATION_PATH "/../data/cache/default"', 'production', false);
+$appConfigFile->addStringItem('resources.session.save_path', 'APPLICATION_PATH "/../data/sessions"', 'production', false);
+$appConfigFile->addStringItem('resources.session.use_only_cookies', true);
+$appConfigFile->addStringItem('resources.session.name', 'application');
+$appConfigFile->addStringItem('resources.session.remember_me_seconds', 864000);
+$appConfigFile->addStringItem('resources.translate.adapter', 'gettext');
+$appConfigFile->addStringItem('resources.translate.data', 'APPLICATION_PATH "/../data/locales/languages"', 'production', false);
+$appConfigFile->addStringItem('resources.translate.options.scan', 'directory');
+$appConfigFile->addStringItem('resources.translate.options.cache', 'default');
+$appConfigFile->addStringItem('resources.router.routes.defaultRoute.type', 'Zend_Controller_Router_Route_Module');
+$appConfigFile->addStringItem('resources.router.routes.defaultRoute.route', ':module');
+$appConfigFile->addStringItem('resources.router.routes.defaultRoute.defaults.module', 'default');
+$appConfigFile->addStringItem('resources.router.routes.language.type', 'Zend_Controller_Router_Route');
+$appConfigFile->addStringItem('resources.router.routes.language.route', ':lang');
+$appConfigFile->addStringItem('resources.router.routes.language.reqs.lang', '^(en|es|fr)$');
+$appConfigFile->addStringItem('languages.en', 'en_US');
+$appConfigFile->addStringItem('languages.fr', 'fr_FR');
+$appConfigFile->addStringItem('languages.es', 'es_ES');
+$appConfigFile->addStringItem('resources.locale.default', 'en_US');
+$appConfigFile->addStringItem('phpSettings.date.timezone', 'America/New_York');
+$appConfigFile->addStringItem('resources.router.routes.default.type', 'Zend_Controller_Router_Route_Chain');
+$appConfigFile->addStringItem('resources.router.routes.default.chain', 'language, defaultRoute');
+$appConfigFile->addStringItem('resources.frontController.plugins.multiLang', "Net\SylvainBoucher\Controller\Plugin\MultiLang");
+$appConfigFile->addStringItem('resources.frontController.plugins.navigation', "Net\SylvainBoucher\Controller\Plugin\Navigation");
+$appConfigFile->addStringItem('resources.frontController.actionHelperPaths.Net_SylvainBoucher_Controller_Action_Helper', "Net/SylvainBoucher/Controller/Action/Helper");
+$appConfigFile->addStringItem('phpSettings.error_reporting', '-1', 'development');
+$appConfigFile->addStringItem('resources.cachemanager.default.frontend.options.caching', 0, 'development');
+$appConfigFile->addStringItem('resources.cachemanager.default.frontend.options.caching', 1, 'staging');
+$appConfigFile->addStringItem('enablePluginLoaderCache', 0, 'development');
+$appConfigFile->addStringItem('enablePluginLoaderCache', 0, 'testing');
+$appConfigFile->addStringItem('enablePluginLoaderCache', 1, 'production');
+$appConfigFile->addStringItem('enablePluginLoaderCache', 1, 'staging');
+$appConfigFile->addStringItem('lucene.basepath', 'APPLICATION_PATH "/../data/indexes"', 'production', false);
+
+
+file_put_contents('application.ini', $appConfigFile->getContents());
+

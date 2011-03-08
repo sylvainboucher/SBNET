@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project default="dist" name="SBNET" description="SBNET" >
+	<property file="./build.properties" />
+	<target name="clean">
+		<exec command="rm -rf ${build.dirname}" checkreturn="true"  />
+	</target>
+	<target name="prepare" depends="clean" >
+		<mkdir dir="${build.dirname}" />
+	</target>
+	<target name="init_project" depends="prepare" >
+		<exec command="zf create project ${build.dirname}" checkreturn="true"  />
+		<exec command="zf enable layout" dir="${build.dirname}" checkreturn="true" />
+		<exec command="zf configure dbadapter 'adapter=${db.adapter}&amp;host=${db.host}&amp;username=${db.username}&amp;password=${db.password}&amp;dbname=${db.dbname}'" dir="${build.dirname}" checkreturn="true" />
+	</target>
+	<target name="create_dir" depends="init_project">
+		<mkdir dir="${build.dirname}/public/css" />
+		<mkdir dir="${build.dirname}/public/js" />
+        <mkdir dir="${build.dirname}/public/images" />
+		<mkdir dir="${build.dirname}/data/cache" />
+		<mkdir dir="${build.dirname}/data/cache/default" />
+		<mkdir dir="${build.dirname}/data/indexes" />
+		<mkdir dir="${build.dirname}/data/locales" />
+		<mkdir dir="${build.dirname}/data/logs" />		
+		<mkdir dir="${build.dirname}/data/sessions" />
+		<mkdir dir="${build.dirname}/data/uploads" />
+        <mkdir dir="${build.dirname}/scripts/jobs" />
+        <mkdir dir="${build.dirname}/scripts/build" />
+        <mkdir dir="${build.dirname}/temp" />
+        <mkdir dir="${build.dirname}/application/services" />
+		<mkdir dir="${build.dirname}/application/controllers/helpers" />
+        <mkdir dir="${build.dirname}/application/layouts/filters" />
+        <mkdir dir="${build.dirname}/application/layouts/helpers" />
+		<mkdir dir="${build.dirname}/library/Net" />
+		<mkdir dir="${build.dirname}/docs/API" />
+	</target>
+	<target name="build" depends="create_dir">
+		<touch file="${build.dirname}/version.txt" />
+		<echo msg="${build.version}" file="${build.dirname}/version.txt" />
+		<touch file="${build.dirname}/data/logs/application.log" />
+		<chmod file="${build.dirname}/data/logs/application.log" mode="0777" />	
+		<chmod file="${build.dirname}/data/cache" mode="0777" />
+		<chmod file="${build.dirname}/data/indexes" mode="0777" />
+		<chmod file="${build.dirname}/data/uploads" mode="0777" />
+		<chmod file="${build.dirname}/data/cache/default" mode="0777" />
+		<chmod file="${build.dirname}/data/sessions" mode="0777" />
+		<copy file="src/layout.phtml" todir="${build.dirname}/application/layouts/scripts" overwrite="true"  />
+		<copy file="src/LanguageMenu.php" todir="${build.dirname}/application/layouts/helpers" overwrite="true"  />
+		
+		<copy todir="${build.dirname}/library/Net" >
+			<fileset dir="src/Net" >
+				<include name="**" />
+			</fileset>
+		</copy>
+
+		<exec command="rm -rf ${build.dirname}/tests" checkreturn="true"  />
+		<copy overwrite="true" todir="${build.dirname}/tests" >
+			<fileset dir="src/tests" >
+				<include name="**" />
+			</fileset>
+		</copy>
+		<mkdir dir="${build.dirname}/data/locales/languages" />
+		<copy todir="${build.dirname}/data/locales/languages"  >
+			<fileset dir="src/languages" >
+				<include name="*/*.*" />
+			</fileset>
+		</copy>
+		<echo msg="" file="${build.dirname}/application/views/scripts/index/index.phtml" />
+		<exec command="src/createConfig ${build.dirname}" checkreturn="true" />
+		<move file="application.ini" todir="${build.dirname}/application/configs" overwrite="true" />
+		<copy file="src/Bootstrap.php" todir="${build.dirname}/application" overwrite="true" />
+		<copy file="src/Acl.php" todir="${build.dirname}/application/configs" overwrite="true" />
+		<copy file="src/Navigation.php" todir="${build.dirname}/application/configs" overwrite="true" />
+	</target>
+	<target name="dist" depends="build" >
+        <exec command="phpunit --coverage-html ./report" dir="${build.dirname}/tests" checkreturn="true" />
+        <phpdoc title="API Documentation"
+          destdir="${build.dirname}/docs/API"
+          sourcecode="false" 
+          quiet="true" 
+          output="HTML:frames:DOM/earthli">
+           <fileset dir="${build.dirname}/library">
+              <include name="**/*.php" />
+           </fileset>
+           <projdocfileset dir=".">
+              <include name="README" />
+              <include name="INSTALL" />
+              <include name="CHANGELOG" />
+           </projdocfileset>
+        </phpdoc>
+
+	</target>
+</project>

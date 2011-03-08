@@ -1,0 +1,22 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: application\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: French\n"
+"X-Poedit-Country: FRANCE\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-KeywordsList: translate\n"
+"POT-Creation-Date: \n"
+"Last-Translator: username <youremail@example.com>\n"
+"X-Poedit-SearchPath-0: ../../../..\n"
+
+#: ../../../../application/views/scripts/index/index.phtml:2
+msgid "hello world"
+msgstr "salut monde"
+

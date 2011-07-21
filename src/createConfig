@@ -54,6 +54,7 @@ $appConfigFile->addStringItem('resources.translate.adapter', 'gettext');
 $appConfigFile->addStringItem('resources.translate.data', 'APPLICATION_PATH "/../data/locales/languages"', 'production', false);
 $appConfigFile->addStringItem('resources.translate.options.scan', 'directory');
 $appConfigFile->addStringItem('resources.translate.options.cache', 'default');
+$appConfigFile->addStringItem('resources.translate.options.disableNotices', true);
 $appConfigFile->addStringItem('resources.router.routes.defaultRoute.type', 'Zend_Controller_Router_Route_Module');
 $appConfigFile->addStringItem('resources.router.routes.defaultRoute.route', ':module');
 $appConfigFile->addStringItem('resources.router.routes.defaultRoute.defaults.module', 'default');

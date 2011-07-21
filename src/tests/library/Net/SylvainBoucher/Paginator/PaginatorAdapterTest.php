@@ -39,7 +39,7 @@ class Concrete_Db_Select extends Zend_Db_Select
     {
         return $this;
     }
-    public function limit($sql, $count, $offset = 0)
+    public function limit($count = null, $offset = null)
     {
 
     }

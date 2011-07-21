@@ -103,7 +103,7 @@ class ConcreteDbTable extends Zend_Db_Table_Abstract
     {
         $this->_returnNull = true;
     }
-    public function select()
+    public function select($withFromPart = self::SELECT_WITHOUT_FROM_PART)
     {
         return $this;
     }
@@ -111,14 +111,14 @@ class ConcreteDbTable extends Zend_Db_Table_Abstract
     {
         return $this;
     }
-    public function fetchRow()
+    public function fetchRow($where = null, $order = null, $offset = null)
     {
         if ($this->_returnNull) {
             return null;
         }
         return new ConcreteRow();
     }
-    public function delete()
+    public function delete($where)
     {
         return 1;
     }
@@ -130,11 +130,11 @@ class ConcreteDbTable extends Zend_Db_Table_Abstract
     {
         return $this;
     }
-    public function insert($data)
+    public function insert(array $data)
     {
         return 5;
     }
-    public function update()
+    public function update(array $data, $where)
     {
         
     }
